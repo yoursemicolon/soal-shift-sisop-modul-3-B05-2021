@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/ipc.h>
@@ -10,48 +9,37 @@
 #define COLUMN_SIZE 6
 #define MAX_THREADS 4
 
-// deklarasi matriks
-int *value;
+int (*value)[6];
 int first[ROW_SIZE][MIDDLE_SIZE], second[MIDDLE_SIZE][COLUMN_SIZE], multiply[ROW_SIZE][COLUMN_SIZE];
-
-void sharedMemo() {
-    for(int i=0; i<ROW_SIZE; i++) {
-        for(int j=0; j<COLUMN_SIZE; j++) {
-            *value = multiply[i][j];
-            sleep(1);
-            printf("Terkirim %d\n", *value);
-        }
-    }
-}
 
 void prtScreen() {
     printf("\nHasil Perkalian Matriks:\n");
     for(int i=0; i<ROW_SIZE; i++) {
         for(int j=0; j<COLUMN_SIZE; j++) {
-            printf("%d\t", multiply[i][j]);
+            printf("%d\t", value[i][j]);
         }
         printf("\n");
     }
     printf("\n");
+    sleep(5);
 }
 
 void *multiplyMatrices(void *arg) {
     int sum = 0;
+
     // Each thread computes 1/4th of matrix multiplication
     for(int i=0; i<ROW_SIZE; i++) {
         for(int j=0; j<COLUMN_SIZE; j++) {
             for(int k=0; k<MIDDLE_SIZE; k++) {
                 sum += first[i][k] * second[k][j];
             }
-            multiply[i][j] = sum;
+            value[i][j] = sum;
             sum = 0;
         }
     }
 }
 
 void inputMatriksB() {
-
-     // input matriks 3 x 6
     for(int i=0; i<MIDDLE_SIZE; i++) {
         for(int j=0; j<COLUMN_SIZE; j++) {
             scanf("%d", &second[i][j]);
@@ -60,8 +48,6 @@ void inputMatriksB() {
 }
 
 void inputMatriksA() {
-
-    // input matriks 4 x 3
     for(int i=0; i<ROW_SIZE; i++) {
         for(int j=0; j<MIDDLE_SIZE; j++) {
             scanf("%d", &first[i][j]);
@@ -71,9 +57,9 @@ void inputMatriksA() {
 
 int main(void) {
 
-    key_t key = 1234;
+    key_t key = 12345;
 
-    int shmid = shmget(key, sizeof(int), IPC_CREAT | 0666);
+    int shmid = shmget(key, sizeof(int[4][6]), IPC_CREAT | 0666);
     value = shmat(shmid, NULL, 0);
 
     inputMatriksA();
@@ -93,8 +79,7 @@ int main(void) {
     }
 
     prtScreen();
-    sharedMemo();
 
     shmdt(value);
-    shmctl(shmid, IPC_RMID, NULL);
+    // shmctl(shmid, IPC_RMID, NULL);
 }
