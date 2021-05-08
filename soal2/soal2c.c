@@ -15,6 +15,7 @@ int main() {
     }
     if(pipe(pipe2) == -1) {
         fprintf(stderr, "Pipe failed");
+        return 1;
     }
 
     pid = fork();
