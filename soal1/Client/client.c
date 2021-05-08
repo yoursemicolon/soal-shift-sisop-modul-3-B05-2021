@@ -46,10 +46,16 @@ int main(int argc, char const *argv[])
         printf("Masukkan user dan password anda\n");
         printf("Username :");
         scanf("%s", user);
+        //printf("%s\n", user);
         printf("Password :");
         scanf("%s", pass);
+        //printf("%s\n", pass);
+
         strcat(user, ":");
+        // printf("%s\n", user);
+
         strcat(user, pass);
+        printf("%s", user);
         send(sock, user, strlen(user), 0);
         valread = read(sock, buffer, 1024);
         printf("%s\n", buffer);
