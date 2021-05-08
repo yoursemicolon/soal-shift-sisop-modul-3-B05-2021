@@ -1,119 +1,167 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <errno.h>
-#include <syslog.h>
+#include <string.h>
 #include <ctype.h>
-#include <unistd.h>
-#include <string.h>
-#include <math.h>
+#include <stdlib.h>
 #include <time.h>
-#include <dirent.h>
-#include <string.h>
-#include <string.h>
-#include <pthread.h>
+#include <wait.h>
 #include <unistd.h>
-#include <sys/wait.h>
+#include <errno.h>
+#include <fcntl.h>
+#include<sys/types.h>
+#include<sys/stat.h>
+#include <syslog.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <dirent.h>
 #include <pthread.h>
+#include <limits.h>
+#define MAX_THREAD 500
 
-#define EOF (-1)
+//char dir[] = "/home/yoursemicolon/";
+char p_dir[] = "/home/yoursemicolon/soal3/";
+pthread_t tid[MAX_THREAD];
 
-int file__Reg(const char *P){ //cek file atau folder
-    struct stat P_stat;
-    stat(P, &P_stat);
-    return 
-        S_ISREG(P_stat.st_mode);
+typedef struct arg_struct {
+    char asal[1000];
+    char cwd[1000];
+} arg_struct;
+
+int isRegularFile(const char *path) {
+    struct stat path_stat;
+    if(stat(path, &path_stat) != 0) return 0; // is not file
+    return S_ISREG(path_stat.st_mode);
 }
 
-pthread_t T[100];
-char tempdirektori[1024];
+void pindahFile(char *argv, char *cwd) {
+    char argument[1000];
+    strcpy(argument, argv);
 
-void* pindahtempat(void *arg)
-{
-    char *P;
-    char ekstensi[100];
-    char D[100]; //destinasi
-    char S[100]; //source
-    char potong[100];
-    char namafile[100];
-    char C[1024]; //cwd
-    char *pisah,*pisah2;
-    char *A[5];
-    char *an[5];
-    int x = 0;
+    int fileType = isRegularFile(argument);
+    char dot = '.';
+    char slash = '/';
+    char *type = strrchr(argument, dot) + 1;
+    char *name = strrchr(argument, slash) + 1;
+    char tipeLow[100];
 
-    P = (char*) arg;
-
-    strcpy(S, arg);
-    strcpy(potong, arg);
-    pisah = strtok(P,"."); //split path
-
-    while(pisah != 0){
-        A[x] = pisah;x++;
-        pisah = strtok(NULL,".");
-    }if(x == 1){
-        strcpy(ekstensi, "Unknown");
-    }else{
-        int y;
-        for(y = 0; y < strlen(A[x-1]); y++){
-            ekstensi[y] = tolower(A[x-1][y]); //nyimpen seluruh ekstensi
+    if(type) {
+        if((type[strlen(type)-1] >= 'a' && type[strlen(type)-1] <= 'z') || (type[strlen(type)-1] >= 'A' && type[strlen(type)-1] <= 'Z')) {
+            strcpy(tipeLow, type);
+            // for(int i=0; tipeLow[i]; i++) {
+            //     tipeLow[i] = tolower(tipeLow[i]);
+            // }
+        }
+    } else {
+        if(!fileType) {
+            printf("Ini adalah folder, salah argumen\n");
+            return;
+        } else {
+            strcpy(tipeLow, "Unknown"); // tanpa ekstensi
         }
     }
-    pisah2 = strtok(potong, "/"); //split direktori
-    while(pisah2 != 0){
-        an[x] = pisah2;x++;
-        pisah2 = strtok(0,"/");
-    }
 
-    strcpy(namafile, an[x-1]);
+    mkdir(tipeLow, 0777); // buat folder ekstensi
 
-    getcwd(C, sizeof(C)); // dpt direktori yang lg dibuka
-    strcpy(D, C);
-    strcat(D, "/");
-    strcat(D, ekstensi);
-    __builtin___memset_chk (ekstensi, 0,100, __darwin_obsz0 (ekstensi));
-    mkdir(D,0777);
-    //memset(ekstensi,0,100);
+    size_t len = 0;
+    char a[1000]; // res
+    char b[1000]; // des
 
-    FILE *p1;
-    FILE *p2;
-    // p1 = fopen(S,"r");
-    // p2 = fopen(D,"w");
-    strcat(D, "/");
-    strcat(D, namafile);
-    
-    p1 = fopen(S,"r");
-    p2 = fopen(D,"w");
+    strcpy(a, argv);
+    strcpy(b, cwd);
 
-    int ch;
-    if(!p1){
-        printf("Unable to open source file to read!!\n");
-        fclose(p2);
-    }if(!p2){
-        printf("Unable to open target file to write\n");
-    }while((ch = fgetc(p1)) != -1)
-    {
-        fputc(ch, p2); //pindah ke file lama
-    }
-    remove(S); //Hps file lama
-    return 0;
+    strcat(b, "/");
+    strcat(b, tipeLow);
+    strcat(b, "/");
+    strcat(b, name);
+
+    // printf("a = %s\n", a);
+    // printf("b = %s\n", b);
+
+    rename(a, b);
+    remove(a);
 }
 
-int main(int argc, char *argv[]){
-    int x;
-    getcwd(tempdirektori, sizeof(tempdirektori));
-    if(strcmp(argv[1], "-f") == 0){
-        for( x = (1+1); x < argc; x++){
-            if(file__Reg(argv[x])){
-                pthread_create(&(T[x-2]), 0, pindahtempat, (void *)argv[x]); //buat thread
-                printf("File %d : Berhasil Dikategorikan\n", x-1);
-            }else{
-                printf("File %d : Sad, Gagal :(\n", x-1);
+void *pindah(void *arg) {
+    arg_struct args = *(arg_struct*)arg;
+
+    pindahFile(args.asal, args.cwd);
+    pthread_exit(0);
+}
+
+void sortHere(char *asal) {
+    arg_struct args;
+    int check;
+
+    char namaProgramIni[260];
+    strcpy(namaProgramIni, p_dir);
+    strcat(namaProgramIni, "soal3.c");
+
+    strcpy(args.cwd, p_dir);
+    DIR *dirp;
+    struct dirent *entry;
+    dirp = opendir(asal);
+
+    int index = 0;
+    while((entry = readdir(dirp)) != NULL) {
+        if(entry->d_type == DT_REG) {
+            char namaFile[105];
+
+            strcat(namaFile, asal);
+            strcat(namaFile, entry->d_name);
+            // sprintf(namaFile, "%s%s", asal, entry->d_name);
+            strcpy(args.asal, namaFile);
+
+            if(strcmp(namaFile, namaProgramIni) != 0) {
+                check = pthread_create(&tid[index], NULL, pindah, (void *)&args);
+
+                if(check == 0) {
+                    printf("Direktori sukses disimpan!");
+                } else {
+                    printf("Yah, gagal disimpan :(\n");
+                }
+                printf("%s\n", namaFile);
+                sleep(1);
+                index++;
             }
-        }for( x = 0; x < argc - 2; x++){
-            pthread_join(T[x], 0);
         }
     }
+}
+
+int main(int argc, char *argv[]) {
+    if ((chdir(p_dir)) < 0) {
+        exit(EXIT_FAILURE);
+    }
+
+    arg_struct args;
+    getcwd(args.cwd, sizeof(args.cwd));
+    int check;
+
+    if(strcmp(argv[1], "-f") == 0) {
+        int index = 0;
+
+        for(int i=2; i<argc; i++) {
+            strcpy(args.asal, argv[i]);
+            check = pthread_create(&tid[index], NULL, pindah, (void *)&args);
+
+            if(check == 0) printf("File %d : Berhasil Dikategorikan\n", i-1);
+            else printf("File %d : Sad, Gagal :(\n", i-1);
+
+            index++;
+            sleep(1);
+        }
+
+        for(int i=0; i<index; i++) {
+            pthread_join(tid[i], NULL);
+        }
+    } else if(strcmp(argv[1], "-d") == 0) {
+        char asal[1000];
+        strcpy(asal, argv[2]);
+        sortHere(asal);
+    } else if(strcmp(argv[1], "*") == 0) {
+        char asal[] = "/home/yoursemicolon/soal3";
+        sortHere(asal);
+    } else {
+        printf("Salah argumen\n");
+        return 0;
+    }
+    return 0;
 }
