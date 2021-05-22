@@ -17,6 +17,9 @@ Pada soal ini, kami diminta untuk membuat program dengan ketentuan sebagai berik
 1. (a) Melakukan perkalian matrix (4x3 dengan 3x6) dan menampilkan hasilnya
 2. (b) Melakukan perhitungan matrix baru 
 3. (c) Mengecek 5 proses teratas yang memakan resource komputer dengan command ```ps aus| sort -nrk 3,3 | head -5``` menggunakan IPS Pipes
+### Soal 1a
+### Soal 1b
+### Soal 1c
 
 <a name="soal2"></a>
 # Soal 2
