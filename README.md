@@ -765,7 +765,7 @@ Berikut adalah gambar jika argument path dimasukkan. Menghasilkan output sebagai
 
 <img width="575" alt="Screen Shot 2021-05-23 at 21 29 14" src="https://user-images.githubusercontent.com/72669398/119264707-7006f400-bc0e-11eb-8928-36fe8d5d9d82.png">
 
-Isi folder apabila menjalankan program dengan mode -d. Yang memiliki ekstensi lebih dari 1, akan dikategorikan ke dalam folder sesuai dengan titik terdepan saja (seperti .tar.gz). 
+Isi folder apabila menjalankan program dengan opsi -d. Yang memiliki ekstensi lebih dari 1, akan dikategorikan ke dalam folder sesuai dengan titik terdepan saja (seperti .tar.gz). 
 
 <img width="827" alt="Screen Shot 2021-05-23 at 21 30 43" src="https://user-images.githubusercontent.com/72669398/119264712-71d0b780-bc0e-11eb-8752-35c0a9d50787.png">
 
@@ -775,7 +775,7 @@ Berikut adalah gambar jika argument path dimasukkan. Menghasilkan output sebagai
 
 <img width="255" alt="Screen Shot 2021-05-23 at 21 31 15" src="https://user-images.githubusercontent.com/72669398/119264718-75643e80-bc0e-11eb-8fd3-ef46de0b34e4.png">
 
-Isi folder apabila menjalankan program dengan mode *. Karena mengkategorikan file dalam current working directory, terlihat bahwa file-file seperti soal3.zip, dan soal3.c juga ikut terkategori pada folder sesuai dengan ekstensi. 
+Isi folder apabila menjalankan program dengan opsi *. Karena mengkategorikan file dalam current working directory, terlihat bahwa file-file seperti soal3.zip, dan soal3.c juga ikut terkategori pada folder sesuai dengan ekstensi. 
 
 <img width="819" alt="Screen Shot 2021-05-23 at 21 31 23" src="https://user-images.githubusercontent.com/72669398/119264722-772e0200-bc0e-11eb-87b8-6e7a52d82485.png">
 
