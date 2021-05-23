@@ -154,7 +154,7 @@ while (1)
             ...
 ```
 Client
-```
+```C
 void regis()
 {
     read(sock, receive, 1024);
@@ -205,7 +205,7 @@ void sends(char data[])
 }
 ```
 Di sini untuk mencapai ketentuan soal dimana hanya satu client bisa login pada satu waktu maka menggunakan array yang bersifat seperti antrian dari geeks for geeks. Pada awalnya client membaca input dari user berupa pilihan login atau register
-```
+```C
 while (1)
     {
         pthread_t thread;
@@ -225,7 +225,7 @@ while (1)
         }
 ```
 Kemudian mengirim input tersebut ke server. Untuk memanage client yang sedang terhubung menggunakan fungsi pembantu ```checkconnect()``` yang akan menggeser array antrian client saat menerima pesan "0"
-```
+```C
 void checkconnect()
 { // check Disconnects + Read vals
     resetbuffer();
@@ -244,7 +244,7 @@ void checkconnect()
 }
 ```
 Kemudian saat user memilih register maka akan masuk ke fungsi ```addUser()``` yang akan menambahkan data user baru ke file ```akun.txt``` dan mengirim pesan registrasi berhasil ke client
-```
+```C
 void addUser(char str[])
 {
     printf("ADDING USER\n");
@@ -268,7 +268,7 @@ if (strcmp(command, "register") == 0)
                 }
 ```
 Ketika memilih login maka ketika menerima username dan password dari client server akan mengecek apakah username dan pass yang diterima sesuai dengan file ```akun.txt```
-```
+```C
 bool checkuser(char str[])
 {
     printf("checkuser\n");
