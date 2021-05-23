@@ -187,7 +187,7 @@ else if(pid == 0) { // child process
   ```
  
 Hasil eksekusi:<br>
-<img src="https://github.com/yoursemicolon/soal-shift-sisop-modul-3-B05-2021/blob/main/screenshots/soal2c.png" width="600"></img>
+<img src="https://github.com/yoursemicolon/soal-shift-sisop-modul-3-B05-2021/blob/main/screenshots/soal2c.png" width="800"></img>
 
 <a name="soal3"></a>
 ## Soal 3
