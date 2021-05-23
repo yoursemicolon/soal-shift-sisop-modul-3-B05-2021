@@ -64,6 +64,46 @@ Membuat 4 thread untuk melakukan perkalian matriks
 Menampilkan hasil perkalian
 
 ### Soal 1b
+Melakukan perhitungan matriks output soal 1a dengan matriks input baru. Perhitungannya adalah setiap sel yang berasal dari matriks A menjadi angka untuk faktorial, lalu sel dari matriks B menjadi batas maksimal faktorialnya matriks. Melakukan perhitungan:
+```C
+for(int i=0; i<ROW_SIZE; i++) {
+        for(int j=0; j<COLUMN_SIZE; j++) {
+            temp_mat_a = value[i][j];
+            temp_mat_b = input[i][j];
+
+            pthread_create(&tid[count_thread], NULL, &condition, NULL);
+
+            count_thread++;
+            sleep(1);
+        }
+        printf("\n");
+    }
+
+    for(int i=0; i<count_thread; i++) {
+        pthread_join(tid[i], NULL);
+    }
+ ```
+ Pengecekan kondisi:
+ ```C
+ void *condition(void *arg) {
+    if(temp_mat_a == 0 || temp_mat_b == 0) printf("0 ");
+    else if(temp_mat_a >= temp_mat_b) {
+        printf("%llu ", factorial(temp_mat_a,temp_mat_a-temp_mat_b));
+    }
+    else {
+        printf("%llu ", factorial(temp_mat_a, 0));
+    }
+}
+```
+Perhitungan faktorial:
+```C
+unsigned long long factorial(int a, int b) {
+    if(a == b) return 1;
+    else return a*factorial(a-1, b);
+}
+```
+
+
 ### Soal 1c
 
 <a name="soal2"></a>
