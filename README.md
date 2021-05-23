@@ -336,26 +336,20 @@ Setiap 1 file yang dikategorikan dioperasikan oleh 1 thread agar bisa berjalan s
 
 Berikut adalah gambar jika argument path dimasukkan. Menghasilkan output sebagai berikut.
 
-<img width="393" alt="Screen Shot 2021-05-23 at 15 56 28" src="https://user-images.githubusercontent.com/72669398/119254245-75991580-bbdf-11eb-9665-f156da6dfd10.png">
-
-<img width="513" alt="Screen Shot 2021-05-23 at 15 58 38" src="https://user-images.githubusercontent.com/72669398/119254297-be50ce80-bbdf-11eb-86da-66a08e90c1bf.png">
 
 - Opsi -d
 
 Berikut adalah gambar jika argument path dimasukkan. Menghasilkan output sebagai berikut.
 
-<img width="448" alt="Screen Shot 2021-05-23 at 15 37 55" src="https://user-images.githubusercontent.com/72669398/119254322-da547000-bbdf-11eb-9bd0-898b4b46de0e.png">
 
-<img width="546" alt="Screen Shot 2021-05-23 at 15 54 29" src="https://user-images.githubusercontent.com/72669398/119254356-0839b480-bbe0-11eb-8cf6-8efc0326a2b3.png">
-
-<img width="541" alt="Screen Shot 2021-05-23 at 16 02 00" src="https://user-images.githubusercontent.com/72669398/119254394-420abb00-bbe0-11eb-965b-c5c9155f08a5.png">
 
 - Opsi *
 
 Berikut adalah gambar jika argument path dimasukkan. Menghasilkan output sebagai berikut.
 
-<img width="534" alt="Screen Shot 2021-05-23 at 15 55 12" src="https://user-images.githubusercontent.com/72669398/119254405-5058d700-bbe0-11eb-9f8f-aa12d2f04bed.png">
+
 
 **Kendala**
+- jika penulisan ekstensi salah yang dimana seharusnya akan muncul output ```Sad, gagal``` tetapi yang muncul malah sebaliknya yaitu berhasil.
 - 
 - 
