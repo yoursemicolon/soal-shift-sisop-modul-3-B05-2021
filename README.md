@@ -334,7 +334,10 @@ Setiap 1 file yang dikategorikan dioperasikan oleh 1 thread agar bisa berjalan s
 
 - Opsi -f
 
+Berikut adalah gambar jika argument path dimasukkan. Menghasilkan output sebagai berikut.
+
 
 - Opsi -d
 
+Berikut adalah gambar jika argument path dimasukkan. Menghasilkan output sebagai berikut.
 
