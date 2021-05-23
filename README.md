@@ -334,3 +334,7 @@ Setiap 1 file yang dikategorikan dioperasikan oleh 1 thread agar bisa berjalan s
 
 - Opsi -f
 <img width="384" alt="Screen Shot 2021-05-23 at 12 16 37" src="https://user-images.githubusercontent.com/72669398/119249188-c2212880-bbc0-11eb-9565-4039aa9eea03.png">
+
+<img width="435" alt="Screen Shot 2021-05-23 at 12 18 30" src="https://user-images.githubusercontent.com/72669398/119249268-65723d80-bbc1-11eb-85db-2a8cb57c25ce.png">
+
+<img width="129" alt="Screen Shot 2021-05-23 at 12 19 35" src="https://user-images.githubusercontent.com/72669398/119249269-67d49780-bbc1-11eb-914f-de3dfe458645.png">
