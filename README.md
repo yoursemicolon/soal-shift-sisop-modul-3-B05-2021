@@ -65,7 +65,7 @@ Membuat 4 thread untuk melakukan perkalian matriks
  .....
  ```
 Hasil perkalian:<br>
-<img src="https://github.com/yoursemicolon/soal-shift-sisop-modul-3-B05-2021/blob/main/screenshots/soal2a.png" width="600"></img>
+<img src="https://github.com/yoursemicolon/soal-shift-sisop-modul-3-B05-2021/blob/main/screenshots/soal2a.png"></img>
 
 ### Soal 2b
 Melakukan perhitungan matriks output soal 1a dengan matriks input baru. Perhitungannya adalah setiap sel yang berasal dari matriks A menjadi angka untuk faktorial, lalu sel dari matriks B menjadi batas maksimal faktorialnya matriks. Melakukan perhitungan:
@@ -107,7 +107,7 @@ unsigned long long factorial(int a, int b) {
 }
 ```
 Hasil perhitungan:<br>
-<img src="https://github.com/yoursemicolon/soal-shift-sisop-modul-3-B05-2021/blob/main/screenshots/soal2b.png" width="600"></img>
+<img src="https://github.com/yoursemicolon/soal-shift-sisop-modul-3-B05-2021/blob/main/screenshots/soal2b.png"></img>
 
 ### Soal 2c
 Mengecek 5 proses teratas yang memakan resource komputer dengan command ```ps aux | sort -nrk 3,3 | head -5``` menggunakan IPC Pipes. Inisialiasi array pipe1 dan pipe2 sebagai file descriptor (key to access to a file). pipe1 untuk menyimpan two ends dari pipe pertama. pipe2 untuk menyimpan two ends dari pipe kedua.
@@ -187,7 +187,7 @@ else if(pid == 0) { // child process
   ```
  
 Hasil eksekusi:<br>
-<img src="https://github.com/yoursemicolon/soal-shift-sisop-modul-3-B05-2021/blob/main/screenshots/soal2c.png" width="800"></img>
+<img src="https://github.com/yoursemicolon/soal-shift-sisop-modul-3-B05-2021/blob/main/screenshots/soal2c.png"></img>
 
 ## Kendala Pengerjaan
 * Mendapatkan segmentation fault pada saat penggunaan shared memory
