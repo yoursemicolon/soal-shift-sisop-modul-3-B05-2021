@@ -74,7 +74,7 @@ Menampilkan hasil perkalian
 
 <a name="soal3"></a>
 ## Soal 3
-**Penjelasan Nomor3**
+**Penjelasan Nomor 3**
 Seorang mahasiswa bernama Alex sedang mengalami masa gabut. Di saat masa gabutnya, ia memikirkan untuk merapikan sejumlah file yang ada di laptopnya. Karena jumlah filenya terlalu banyak, Alex meminta saran ke Ayub. Ayub menyarankan untuk membuat sebuah program C agar file-file dapat dikategorikan. Program ini akan memindahkan file sesuai ekstensinya ke dalam folder sesuai ekstensinya yang folder hasilnya terdapat di working directory ketika program kategori tersebut dijalankan.
 
 Contoh apabila program dijalankan:
@@ -91,7 +91,7 @@ $ ./soal3 -f path/to/file1.jpg path/to/file2.c path/to/file3.zip
 |--file3.zip
 
 ```
-**Catatan: ***
+Catatan: 
 - Kategori folder tidak dibuat secara manual, harus melalui program C
 - Program ini tidak case sensitive. Contoh: JPG dan jpg adalah sama
 - Jika ekstensi lebih dari satu (contoh “.tar.gz”) maka akan masuk ke folder dengan titik terdepan (contoh “tar.gz”)
@@ -214,7 +214,7 @@ File 1 : Berhasil Dikategorikan (jika berhasil)
 File 2 : Sad, gagal :( (jika gagal)
 File 3 : Berhasil Dikategorikan
 ```
-*** Opsi -f digunakan untuk mengkategorikan file sesuai argument yang diinginkan ***
+**Opsi -f digunakan untuk mengkategorikan file sesuai argument yang diinginkan**
 Jika argument -f  dan argument path yang sesuai, nantinya akan dimasukkan ke dalam thread, kemudian akan dieksekusi pada fungsi ```pindahFile```. Thread akan dijalankan bersamaan sesuai dengan banyaknya thread menggunakan ```pthread_join```.
 
 **Source Code**
@@ -252,7 +252,7 @@ Output yang dikeluarkan adalah seperti ini :
 Jika berhasil, print “Direktori sukses disimpan!”
 Jika gagal, print “Yah, gagal disimpan :(“
 ```
-*** Opsi -d digunakan untuk mengkategorikan file pada suatu direktori ***
+**Opsi -d digunakan untuk mengkategorikan file pada suatu direktori**
 Jika argument -d  dan argument path yang sesuai hanya satu yang harus dilakukan pertama kali yaitu memanggil fungsi ```sortHere```. Kemudian, setiap elemen pada array nantinya akan dibuat thread untuk mengeksekusi fungsi ```pindahFile```.
 
 **Source Code**
@@ -290,7 +290,7 @@ $ ./soal3 \*
 ```
 Opsi ini akan mengkategorikan seluruh file yang ada di working directory ketika menjalankan program C tersebut.
 
-*** Opsi * digunakan untuk mengkategorikan seluruh file yang ada di working directory ketika menjalankan program ***
+**Opsi * digunakan untuk mengkategorikan seluruh file yang ada di working directory ketika menjalankan program**
 Jika argument * diberikan maka yang pertama dilakukan adalah menyimpan path current working directory dikarenakan akan mengkategorikan file pada direktori yang sedang digunakan. Kemudian akan memanggil ```sortHere`` untuk menyimpan setiap path dalam array lalu akan dibuat thread untuk dieksekusi pada fungsi ``pindahFile`` dan untuk mengkategorikan file thread akan dijalankan secara paralel.
 
 **Source Code**
