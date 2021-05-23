@@ -64,7 +64,7 @@ Membuat 4 thread untuk melakukan perkalian matriks
     }
  .....
  ```
-Hasil perkalian:
+Hasil perkalian:<br>
 <img src="https://github.com/yoursemicolon/soal-shift-sisop-modul-3-B05-2021/blob/main/screenshots/soal2a.png" width="600"></img>
 
 ### Soal 2b
@@ -106,7 +106,7 @@ unsigned long long factorial(int a, int b) {
     else return a*factorial(a-1, b);
 }
 ```
-Hasil perhitungan:
+Hasil perhitungan:<br>
 <img src="https://github.com/yoursemicolon/soal-shift-sisop-modul-3-B05-2021/blob/main/screenshots/soal2b.png" width="600"></img>
 
 ### Soal 2c
@@ -186,7 +186,7 @@ else if(pid == 0) { // child process
         _exit(1);
   ```
  
-Hasil eksekusi:
+Hasil eksekusi:<br>
 <img src="https://github.com/yoursemicolon/soal-shift-sisop-modul-3-B05-2021/blob/main/screenshots/soal2c.png" width="600"></img>
 
 <a name="soal3"></a>
