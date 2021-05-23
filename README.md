@@ -75,6 +75,7 @@ Menampilkan hasil perkalian
 <a name="soal3"></a>
 ## Soal 3
 **Penjelasan Nomor 3**
+
 Seorang mahasiswa bernama Alex sedang mengalami masa gabut. Di saat masa gabutnya, ia memikirkan untuk merapikan sejumlah file yang ada di laptopnya. Karena jumlah filenya terlalu banyak, Alex meminta saran ke Ayub. Ayub menyarankan untuk membuat sebuah program C agar file-file dapat dikategorikan. Program ini akan memindahkan file sesuai ekstensinya ke dalam folder sesuai ekstensinya yang folder hasilnya terdapat di working directory ketika program kategori tersebut dijalankan.
 
 Contoh apabila program dijalankan:
@@ -207,6 +208,7 @@ void sortHere(char *asal, int *ab) {
 ```
 
 **Soal 3a**
+
 Program menerima opsi -f seperti contoh di atas, jadi pengguna bisa menambahkan argumen file yang bisa dikategorikan sebanyak yang diinginkan oleh pengguna. 
 Output yang dikeluarkan adalah seperti ini :
 ```
@@ -241,6 +243,7 @@ if(strcmp(argv[1], "-f") == 0) {
 ```
 
 **Soal 3b**
+
 Program juga dapat menerima opsi -d untuk melakukan pengkategorian pada suatu directory. Namun pada opsi -d ini, user hanya bisa memasukkan input 1 directory saja, tidak seperti file yang bebas menginput file sebanyak mungkin.
 Contohnya adalah seperti ini:
 ```
@@ -284,6 +287,7 @@ pthread_t t_id[index];
 ```
 
 **Soal 3c**
+
 Selain menerima opsi-opsi di atas, program ini menerima opsi *, contohnya ada di bawah ini:
 ```
 $ ./soal3 \*
@@ -316,9 +320,11 @@ exit(0);
 ```
 
 **Soal 3d**
+
 Semua file harus berada di dalam folder, jika terdapat file yang tidak memiliki ekstensi, file disimpan dalam folder “Unknown”. Jika file hidden, masuk folder “Hidden”. sudah dijelaskan pada ```pindahFile``` terdapat variable ```ext```.
 
 **Soal 3e**
+
 Setiap 1 file yang dikategorikan dioperasikan oleh 1 thread agar bisa berjalan secara paralel sehingga proses kategori bisa berjalan lebih cepat. Semua path akan dijadikan thread dan kemudian dieksekusi secara paralel.
 
 **Output**
