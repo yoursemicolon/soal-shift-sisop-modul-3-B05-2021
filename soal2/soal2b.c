@@ -16,8 +16,8 @@ unsigned long long factorial(int a, int b) {
 
 void *condition(void *arg) {
     if(temp_mat_a == 0 || temp_mat_b == 0) printf("0 ");
-    else if(temp_mat_a > temp_mat_b) {
-        printf("%llu ", factorial(temp_mat_a, temp_mat_b));
+    else if(temp_mat_a >= temp_mat_b) {
+        printf("%llu ", factorial(temp_mat_a,temp_mat_a-temp_mat_b));
     }
     else {
         printf("%llu ", factorial(temp_mat_a, 0));

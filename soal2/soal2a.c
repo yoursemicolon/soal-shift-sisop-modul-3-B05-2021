@@ -10,7 +10,7 @@
 #define MAX_THREADS 4
 
 int (*value)[6];
-int first[ROW_SIZE][MIDDLE_SIZE], second[MIDDLE_SIZE][COLUMN_SIZE], multiply[ROW_SIZE][COLUMN_SIZE];
+int first[ROW_SIZE][MIDDLE_SIZE], second[MIDDLE_SIZE][COLUMN_SIZE];
 
 void prtScreen() {
     printf("\nHasil Perkalian Matriks:\n");
