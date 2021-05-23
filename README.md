@@ -262,25 +262,20 @@ Jika argument -f  dan argument path yang sesuai, nantinya akan dimasukkan ke dal
 
 **Source Code**
 ```C
-if(strcmp(argv[1], "-f") == 0) {
-  index = 0;
-  for(int i=2; i<argc; i++) {
-    strcpy(args.asal, argv[i]);
-    check = pthread_create(&tid[index], NULL, pindahFile, (void *)&args);
-
-    if(check == 0) 
-      printf("File %d : Berhasil Dikategorikan\n", i-1);
-    else 
-      printf("File %d : Sad, Gagal :(\n", i-1);
-
-      index++;
-      sleep(1);
-  }
-
-    for(int i=0; i<index; i++) {
-      pthread_join(tid[i], NULL);
-    }
-  }
+char tempdirektori[1024];
+    //int x;
+    getcwd(tempdirektori, sizeof(tempdirektori));
+    if(strcmp(argv[1], "-f") == 0){
+        for( x = (1+1); x < argc; x++){
+            if(isRegularFile(argv[x])){
+                pthread_create(&(tid[x-2]), 0, pindahFile, (void *)argv[x]); //buat thread
+                printf("File %d : Berhasil Dikategorikan\n", x-1);
+            }else{
+                printf("File %d : Sad, Gagal :(\n", x-1);
+            }
+        }for( x = 0; x < argc - 2; x++){
+            pthread_join(tid[x], 0);
+        }
 ```
 
 **Soal 3b**
