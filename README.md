@@ -13,6 +13,9 @@ Kelompok B05
 
 <a name="soal1"></a>
 ## Soal 1
+
+<a name="soal2"></a>
+## Soal 2
 Pada soal ini, kami diminta untuk membuat program dengan ketentuan sebagai berikut.
 1. (a) Melakukan perkalian matrix (4x3 dengan 3x6) dan menampilkan hasilnya
 2. (b) Melakukan perhitungan matrix dari matriks hasil 1a dan matriks baru (input user). Setiap sel dari matriks A menjadi angka untuk faktorial, sel dari matriks B menjadi batas faktorialnya, dengan ketentuan sebagai berikut.
@@ -24,7 +27,7 @@ If 0 -> 0
 3. (c) Mengecek 5 proses teratas yang memakan resource komputer dengan command ```ps aus| sort -nrk 3,3 | head -5``` menggunakan IPC Pipes
 **Note:** semua matriks berasal dari input ke program
 
-### Soal 1a
+### Soal 2a
 Melakukan perkalian matriks ukuran 4x3 dengan 3x6, hasilnya adalah matriks 4x6. Matriks A dan matriks B merupakan input dari user.
 ```C
 .....
@@ -61,9 +64,10 @@ Membuat 4 thread untuk melakukan perkalian matriks
     }
  .....
  ```
-Menampilkan hasil perkalian
+Hasil perkalian:
+<img src="https://github.com/yoursemicolon/soal-shift-sisop-modul-3-B05-2021/blob/main/screenshots/soal2a.png" width="600"></img>
 
-### Soal 1b
+### Soal 2b
 Melakukan perhitungan matriks output soal 1a dengan matriks input baru. Perhitungannya adalah setiap sel yang berasal dari matriks A menjadi angka untuk faktorial, lalu sel dari matriks B menjadi batas maksimal faktorialnya matriks. Melakukan perhitungan:
 ```C
 for(int i=0; i<ROW_SIZE; i++) {
@@ -102,15 +106,88 @@ unsigned long long factorial(int a, int b) {
     else return a*factorial(a-1, b);
 }
 ```
+Hasil perhitungan:
+<img src="https://github.com/yoursemicolon/soal-shift-sisop-modul-3-B05-2021/blob/main/screenshots/soal2b.png" width="600"></img>
 
-
-### Soal 1c
-
-<a name="soal2"></a>
-# Soal 2
-### Soal 2a
-### Soal 2b
 ### Soal 2c
+Mengecek 5 proses teratas yang memakan resource komputer dengan command ```ps aux | sort -nrk 3,3 | head -5``` menggunakan IPC Pipes. Inisialiasi array pipe1 dan pipe2 sebagai file descriptor (key to access to a file). pipe1 untuk menyimpan two ends dari pipe pertama. pipe2 untuk menyimpan two ends dari pipe kedua.
+```C
+int main() {
+    int pipe1[2], pipe2[2];
+    pid_t pid;
+
+    if(pipe(pipe1) == -1) {
+        fprintf(stderr, "Pipe failed");
+        return 1;
+    }
+    if(pipe(pipe2) == -1) {
+        fprintf(stderr, "Pipe failed");
+        return 1;
+    }
+.....
+}
+```
+Kemudian lakukan fork. Parent akan menggunakan pipe untuk output sehingga kita harus mengganti standard output file descriptor (1) ke writing end dari pipe1[1]. Lalu eksekusi ```argv```.
+```C
+    // input from stdin (already done)
+    // output to pipe1
+    dup2(pipe1[1], 1);
+
+    // close fds
+    close(pipe1[0]);
+    close(pipe1[1]);
+
+    char *argv[] = {"ps", "aux", NULL};
+    execv("/usr/bin/ps", argv);
+
+    // exec didn't work
+    perror("Bad exec ps");
+    _exit(1);
+ ```
+ Child akan menggunakan pipe untuk input sehingga harus mengganti standard input file descriptor (0) ke reading end dari pipe1[0].
+```C
+else if(pid == 0) { // child process
+        // input from pipe1
+        dup2(pipe1[0], 0);
+
+        // output to pipe2
+        dup2(pipe2[1], 1);
+
+        // close fds
+        close(pipe1[0]);
+        close(pipe1[1]);
+        close(pipe2[0]);
+        close(pipe2[1]);
+
+        char *argv[] = {"sort", "-nrk", "3,3", NULL};
+        execv("/usr/bin/sort", argv);
+
+        // exec didn't work
+        perror("Bad exec sort");
+        _exit(1);
+    } else { // parent process
+        // close unused fds
+        close(pipe1[0]);
+        close(pipe1[1]);
+
+        // input from pipe2
+        dup2(pipe2[0], 0);
+
+        // output to stdout (already done)
+        // close fds
+        close(pipe2[0]);
+        close(pipe2[1]);
+
+        char *argv[] = {"head", "-5", NULL};
+        execv("/usr/bin/head", argv);
+
+        // exec didn't work
+        perror("Bad exec head");
+        _exit(1);
+  ```
+ 
+Hasil eksekusi:
+<img src="https://github.com/yoursemicolon/soal-shift-sisop-modul-3-B05-2021/blob/main/screenshots/soal2c.png" width="600"></img>
 
 <a name="soal3"></a>
 ## Soal 3
