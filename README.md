@@ -400,6 +400,39 @@ void add()
     resetbuffer();
 }
 ```
+User akan input beberapa hal seperti di bawah
+```
+void addFiles() { 
+    char publisher[1024] = {0};
+	char tahun[1024] = {0};
+	char path[1024] = {0};
+    sends("Publisher:\n");
+    bRead();
+    strcpy(publisher,recieve);
+    sends("Tahun Publish:\n");
+    bRead();
+    strcpy(tahun,recieve);
+    sends("Filepath:\n");
+    bRead();
+    strcpy(path,recieve);
+```
+Dengan memanipulasi filepath yang telah diinput kita dapat mendapatkan name dan extensionnya.
+```
+ char *ptr1;
+    char slash ='/';
+    ptr1 = strrchr( path, slash );
+    ptr1++;
+    char fname[100];
+    strcpy(fname,ptr1);
+    char ext[10];
+    char *ptr2;
+    char dot ='.';
+    ptr2 = strrchr( path, dot );
+    ptr2++;
+    strcpy(ext,ptr2);
+```
+<img src="https://github.com/yoursemicolon/soal-shift-sisop-modul-3-B05-2021/blob/main/screenshots/soal1c1.png"></img> <br>
+
 <a name="soal2"></a>
 ## Soal 2
 Pada soal ini, kami diminta untuk membuat program dengan ketentuan sebagai berikut.
