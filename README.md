@@ -298,7 +298,7 @@ Opsi ini akan mengkategorikan seluruh file yang ada di working directory ketika 
 
 **Opsi * digunakan untuk mengkategorikan seluruh file yang ada di working directory ketika menjalankan program**
 
-Jika argument * diberikan maka yang pertama dilakukan adalah menyimpan path current working directory dikarenakan akan mengkategorikan file pada direktori yang sedang digunakan. Kemudian akan memanggil ```sortHere`` untuk menyimpan setiap path dalam array lalu akan dibuat thread untuk dieksekusi pada fungsi ``pindahFile`` dan untuk mengkategorikan file thread akan dijalankan secara paralel.
+Jika argument * diberikan maka yang pertama dilakukan adalah menyimpan path current working directory dikarenakan akan mengkategorikan file pada direktori yang sedang digunakan. Kemudian akan memanggil ```sortHere``` untuk menyimpan setiap path dalam array lalu akan dibuat thread untuk dieksekusi pada fungsi ```pindahFile``` dan untuk mengkategorikan file thread akan dijalankan secara paralel.
 
 **Source Code**
 ```C
