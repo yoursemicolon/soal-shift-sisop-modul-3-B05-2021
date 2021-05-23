@@ -2,18 +2,152 @@
 #include <sys/socket.h>
 #include <stdlib.h>
 #include <netinet/in.h>
+#include <pthread.h>
 #include <string.h>
 #include <unistd.h>
 #include <arpa/inet.h>
+#include <stdbool.h>
+#include <fcntl.h>
 #define PORT 8080
+
+char msg[1024];
+char receive[1024];
+bool isloggedin = false;
+int sock;
+
+void regis()
+{
+    read(sock, receive, 1024);
+    printf("%s\n", receive);
+    memset(receive, 0, sizeof(receive));
+    char uname[100];
+    char pass[100];
+    scanf("%s %s", uname, pass);
+    sprintf(msg, "%s:%s\n", uname, pass);
+    send(sock, msg, strlen(msg), 0);
+    memset(msg, 0, sizeof(msg));
+    read(sock, receive, 1024);
+    printf("%s\n", receive);
+    memset(receive, 0, sizeof(receive));
+}
+
+void login()
+{
+    read(sock, receive, 1024);
+    printf("%s\n", receive);
+    memset(receive, 0, sizeof(receive));
+    char uname[100];
+    char pass[100];
+    scanf("%s %s", uname, pass);
+    sprintf(msg, "%s:%s\n", uname, pass);
+    send(sock, msg, strlen(msg), 0);
+    memset(msg, 0, sizeof(msg));
+    read(sock, receive, 1024);
+    printf("%s\n", receive);
+    if (receive[0] == 'L')
+    {
+        isloggedin = true;
+    }
+    memset(receive, 0, sizeof(receive));
+}
+
+void resetbuffer()
+{
+    read(sock, receive, 1024);
+    printf("%s\n", receive);
+    memset(receive, 0, sizeof(receive));
+}
+
+void sends(char data[])
+{
+    send(sock, data, strlen(data), 0);
+    memset(msg, 0, sizeof(msg));
+}
+
+void add()
+{
+    char temp[1024];
+    for (int i = 0; i < 3; i++)
+    {
+        resetbuffer();
+        scanf("%s", temp);
+        temp[strcspn(temp, "\n")] = 0;
+        sends(temp);
+    }
+    FILE *sfd = fopen(temp, "rb");
+    char data[1024] = {0};
+
+    while (1)
+    {
+        memset(data, 0, 1024);
+        size_t size = fread(data, sizeof(char), 1024, sfd);
+        send(sock, data, 1024, 0);
+        break;
+    }
+    printf("break");
+    fclose(sfd);
+    resetbuffer();
+}
+
+void download()
+{
+    resetbuffer();
+    char temp[1024];
+    scanf("%s", temp);
+    temp[strcspn(temp, "\n")] = 0;
+    sends(temp);
+    read(sock, receive, 1024);
+    printf("%s\n", receive);
+    if (receive[0] == 'F')
+    {
+        char dir[300] = "/home/kyu/Documents/Praktikum/Modul3/soal1/";
+        strcat(dir, temp);
+        FILE *file = fopen(dir, "w");
+        char buffer[4096] = {0};
+        while (1)
+        {
+            memset(buffer, 0, sizeof(buffer));
+            int len = read(sock, buffer, 4096);
+            fprintf(file, "%s", buffer);
+            break;
+        }
+        printf("break\n");
+        fclose(file);
+    }
+}
+
+void del()
+{
+    resetbuffer();
+    char temp[1024];
+    scanf("%s", temp);
+    temp[strcspn(temp, "\n")] = 0;
+    sends(temp);
+    resetbuffer();
+}
+
+void see()
+{
+    char buff[10000];
+    read(sock, buff, 10000);
+    printf("%s\n", buff);
+    memset(buff, 0, sizeof(buff));
+}
+
+void find()
+{
+    printf("Tulis nama file anda\n");
+    char find[200] = {0};
+    scanf("%s", find);
+    find[strcspn(find, "\n")] = 0;
+    sends(find);
+    resetbuffer();
+}
 
 int main(int argc, char const *argv[])
 {
     struct sockaddr_in address;
-    int sock = 0, valread;
     struct sockaddr_in serv_addr;
-    char *hello = "Hello from client";
-    char buffer[1024] = {0};
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
         printf("\n Socket creation error \n");
@@ -36,29 +170,55 @@ int main(int argc, char const *argv[])
         printf("\nConnection Failed \n");
         return -1;
     }
+    else
+    {
+        read(sock, receive, 1024);
+        printf("%s\n", receive);
+        memset(receive, 0, sizeof(receive));
+    }
+
     while (1)
     {
-        char choice[100];
-        char user[100], pass[100];
-        printf("Ketik 1 untuk register, Ketik 2 untuk login\n");
-        scanf("%s", choice);
-        send(sock, choice, strlen(choice), 0);
-        printf("Masukkan user dan password anda\n");
-        printf("Username :");
-        scanf("%s", user);
-        //printf("%s\n", user);
-        printf("Password :");
-        scanf("%s", pass);
-        //printf("%s\n", pass);
-
-        strcat(user, ":");
-        // printf("%s\n", user);
-
-        strcat(user, pass);
-        printf("%s", user);
-        send(sock, user, strlen(user), 0);
-        valread = read(sock, buffer, 1024);
-        printf("%s\n", buffer);
+        pthread_t thread;
+        char command[100];
+        scanf("%s", command);
+        strcpy(msg, command);
+        send(sock, msg, strlen(msg), 0);
+        memset(msg, 0, sizeof(msg));
+        if (strcmp(command, "register") == 0)
+        {
+            regis();
+            continue;
+        }
+        else if (strcmp(command, "login") == 0)
+        {
+            login();
+        }
+        else if (strcmp(command, "add") == 0 && isloggedin)
+        {
+            add();
+        }
+        else if (strcmp(command, "download") == 0 && isloggedin)
+        {
+            download();
+        }
+        else if (strcmp(command, "delete") == 0 && isloggedin)
+        {
+            del();
+        }
+        else if (strcmp(command, "see") == 0 && isloggedin)
+        {
+            see();
+        }
+        else if (strcmp(command, "find") == 0 && isloggedin)
+        {
+            find();
+        }
+        else
+        {
+            printf("Command not found\n");
+            continue;
+        }
     }
     return 0;
 }
