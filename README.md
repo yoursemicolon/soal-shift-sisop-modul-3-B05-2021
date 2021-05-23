@@ -13,6 +13,307 @@ Kelompok B05
 
 <a name="soal1"></a>
 ## Soal 1
+Kita diminta untuk membuat sistem database buku dimana :
+1. (a) Dapat melakukan login dan register dimana keduanya membutuhkan username dan password, menerima multi connection, dan menyimpan data username dan password disimpan di akun.txt. 
+2. (b)
+3. (c)
+4. (d)
+5. (e)
+6. (f)
+7. (g)
+8. (h)
+
+
+### Soal 1a
+Server
+```
+void checkconnect()
+{ // check Disconnects + Read vals
+    resetbuffer();
+    int check;
+    if ((check = read(sd, receive, 1024)) == 0)
+    {
+        isconnected = false;
+        isloggedin = false;
+        close(sd);
+        for (i = 0; i < 30; i++)
+        {
+            client_socket[i] = client_socket[i + 1];
+        }
+        client_socket[29] = 0;
+    }
+}
+void addUser(char str[])
+{
+    printf("ADDING USER\n");
+    char idpass[100];
+    strcpy(idpass, str);
+    printf("%s\n", idpass);
+    FILE *file = fopen("akun.txt", "a");
+    fputs(idpass, file);
+    fclose(file);
+}
+...
+while (1)
+    {
+        //clear the socket set
+        FD_ZERO(&readfds);
+
+        //add master socket to set
+        FD_SET(master_socket, &readfds);
+        max_sd = master_socket;
+
+        //add child sockets to set
+        for (i = 0; i < max_clients; i++)
+        {
+            //socket descriptor
+            sd = client_socket[i];
+
+            //if valid socket descriptor then add to read list
+            if (sd > 0)
+                FD_SET(sd, &readfds);
+
+            //highest file descriptor number, need it for the select function
+            if (sd > max_sd)
+                max_sd = sd;
+        }
+        //wait for an activity on one of the sockets , timeout is NULL ,
+        //so wait indefinitely
+        activity = select(max_sd + 1, &readfds, NULL, NULL, NULL);
+
+        if ((activity < 0) && (errno != EINTR))
+        {
+            printf("select error");
+        }
+
+        //If something happened on the master socket ,
+        //then its an incoming connection
+        if (FD_ISSET(master_socket, &readfds))
+        {
+            if ((new_socket = accept(master_socket, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0)
+            {
+                perror("accept");
+                exit(EXIT_FAILURE);
+            }
+            for (i = 0; i < max_clients; i++)
+            {
+                //if position is empty
+                if (client_socket[i] == 0)
+                {
+                    client_socket[i] = new_socket;
+                    printf("Adding to list of sockets as %d\n", i);
+
+                    break;
+                }
+            }
+        }
+        sd = client_socket[0];
+        isconnected = true;
+        printf("CONNECTED\n");
+        strcpy(msg, "Register / Login?\n");
+        printf("%s\n", msg);
+        send(new_socket, msg, strlen(msg), 0);
+        memset(msg, 0, sizeof(msg));
+        while (isconnected)
+        {
+            memset(command, 0, sizeof(command));
+            bReadCommand();
+            printf("Command: %s\n", command);
+            //int a;
+            //scanf("%d",&a);
+            if (isloggedin == false)
+            {
+                if (strcmp(command, "register") == 0)
+                {
+                    printf("register\n");
+                    strcpy(msg, "Register\nInput ID dan password dipisah oleh spasi");
+                    send(new_socket, msg, strlen(msg), 0);
+                    checkconnect();
+                    addUser(receive);
+                    sends("Registrasi berhasil\n");
+                    continue;
+                }
+                if (strcmp(command, "login") == 0)
+                {
+                    printf("login\n");
+                    sends("Login\nInput ID dan password dipisah oleh spasi");
+                    checkconnect();
+                    if (checkuser(receive))
+                    {
+                        sprintf(msg, "Login berhasil.\nSelamat datang %s\n", user);
+                        sends(msg);
+                    }
+                    else
+                    {
+                        sends("ID atau password salah\n");
+                    }
+                    memset(receive, 0, sizeof(receive));
+                    continue;
+                }
+            }
+            ...
+```
+Client
+```
+void regis()
+{
+    read(sock, receive, 1024);
+    printf("%s\n", receive);
+    memset(receive, 0, sizeof(receive));
+    char uname[100];
+    char pass[100];
+    scanf("%s %s", uname, pass);
+    sprintf(msg, "%s:%s\n", uname, pass);
+    send(sock, msg, strlen(msg), 0);
+    memset(msg, 0, sizeof(msg));
+    read(sock, receive, 1024);
+    printf("%s\n", receive);
+    memset(receive, 0, sizeof(receive));
+}
+
+void login()
+{
+    read(sock, receive, 1024);
+    printf("%s\n", receive);
+    memset(receive, 0, sizeof(receive));
+    char uname[100];
+    char pass[100];
+    scanf("%s %s", uname, pass);
+    sprintf(msg, "%s:%s\n", uname, pass);
+    send(sock, msg, strlen(msg), 0);
+    memset(msg, 0, sizeof(msg));
+    read(sock, receive, 1024);
+    printf("%s\n", receive);
+    if (receive[0] == 'L')
+    {
+        isloggedin = true;
+    }
+    memset(receive, 0, sizeof(receive));
+}
+
+void resetbuffer()
+{
+    read(sock, receive, 1024);
+    printf("%s\n", receive);
+    memset(receive, 0, sizeof(receive));
+}
+
+void sends(char data[])
+{
+    send(sock, data, strlen(data), 0);
+    memset(msg, 0, sizeof(msg));
+}
+```
+Di sini untuk mencapai ketentuan soal dimana hanya satu client bisa login pada satu waktu maka menggunakan array yang bersifat seperti antrian dari geeks for geeks. Pada awalnya client membaca input dari user berupa pilihan login atau register
+```
+while (1)
+    {
+        pthread_t thread;
+        char command[100];
+        scanf("%s", command);
+        strcpy(msg, command);
+        send(sock, msg, strlen(msg), 0);
+        memset(msg, 0, sizeof(msg));
+        if (strcmp(command, "register") == 0)
+        {
+            regis();
+            continue;
+        }
+        else if (strcmp(command, "login") == 0)
+        {
+            login();
+        }
+```
+Kemudian mengirim input tersebut ke server. Untuk memanage client yang sedang terhubung menggunakan fungsi pembantu ```checkconnect()``` yang akan menggeser array antrian client saat menerima pesan "0"
+```
+void checkconnect()
+{ // check Disconnects + Read vals
+    resetbuffer();
+    int check;
+    if ((check = read(sd, receive, 1024)) == 0)
+    {
+        isconnected = false;
+        isloggedin = false;
+        close(sd);
+        for (i = 0; i < 30; i++)
+        {
+            client_socket[i] = client_socket[i + 1];
+        }
+        client_socket[29] = 0;
+    }
+}
+```
+Kemudian saat user memilih register maka akan masuk ke fungsi ```addUser()``` yang akan menambahkan data user baru ke file ```akun.txt``` dan mengirim pesan registrasi berhasil ke client
+```
+void addUser(char str[])
+{
+    printf("ADDING USER\n");
+    char idpass[100];
+    strcpy(idpass, str);
+    printf("%s\n", idpass);
+    FILE *file = fopen("akun.txt", "a");
+    fputs(idpass, file);
+    fclose(file);
+}
+...
+if (strcmp(command, "register") == 0)
+                {
+                    printf("register\n");
+                    strcpy(msg, "Register\nInput ID dan password dipisah oleh spasi");
+                    send(new_socket, msg, strlen(msg), 0);
+                    checkconnect();
+                    addUser(receive);
+                    sends("Registrasi berhasil\n");
+                    continue;
+                }
+```
+Ketika memilih login maka ketika menerima username dan password dari client server akan mengecek apakah username dan pass yang diterima sesuai dengan file ```akun.txt```
+```
+bool checkuser(char str[])
+{
+    printf("checkuser\n");
+    char idpass[100];
+    strcpy(idpass, str);
+    printf("%s\n", idpass);
+    char *id;
+    char tok[2] = ":";
+    char find[100];
+    FILE *file = fopen("akun.txt", "r");
+    while (fgets(find, 100, file))
+    {
+        printf("%s%s\n", find, idpass);
+        if (strcmp(find, idpass) == 0)
+        {
+            strcpy(upass, idpass);
+            fclose(file);
+            id = strtok(idpass, tok);
+            strcpy(user, id);
+            isloggedin = true;
+            return true;
+        }
+    }
+    return false;
+}
+...
+if (strcmp(command, "login") == 0)
+                {
+                    printf("login\n");
+                    sends("Login\nInput ID dan password dipisah oleh spasi");
+                    checkconnect();
+                    if (checkuser(receive))
+                    {
+                        sprintf(msg, "Login berhasil.\nSelamat datang %s\n", user);
+                        sends(msg);
+                    }
+                    else
+                    {
+                        sends("ID atau password salah\n");
+                    }
+                    memset(receive, 0, sizeof(receive));
+                    continue;
+                }
+ ```
+Fungsi ```checkuser()``` akan loop through file ```akun.txt``` untuk mencari line yang sesuai dengan pesan dari client.
 
 <a name="soal2"></a>
 ## Soal 2
