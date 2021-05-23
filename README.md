@@ -15,18 +15,18 @@ Kelompok B05
 ## Soal 1
 Kita diminta untuk membuat sistem database buku dimana :
 1. (a) Dapat melakukan login dan register dimana keduanya membutuhkan username dan password, menerima multi connection, dan menyimpan data username dan password disimpan di akun.txt. 
-2. (b)
-3. (c)
-4. (d)
-5. (e)
-6. (f)
-7. (g)
-8. (h)
+2. (b) Sistem memiliki sebuah database yang bernama files.tsv. Isi dari files.tsv ini adalah path file saat berada di server, publisher, dan tahun publikasi. Setiap penambahan dan penghapusan file pada folder file yang bernama FILES pada server akan memengaruhi isi dari files.tsv. Folder FILES otomatis dibuat saat server dijalankan.
+3. (c) Tidak hanya itu, Keverk juga diminta membuat fitur agar client dapat menambah file baru ke dalam server dengan menggunakan ```add``` dan memiliki struktur namafile.extension
+5. (d) Dan client dapat mendownload file yang telah ada dalam folder FILES di server, sehingga sistem harus dapat mengirim file ke client. Server harus melihat dari files.tsv untuk melakukan pengecekan apakah file tersebut valid. Jika tidak valid, maka mengirimkan pesan error balik ke client. Jika berhasil, file akan dikirim dan akan diterima ke client di folder client tersebut.
+6. (e)
+7. (f)
+8. (g)
+9. (h)
 
 
 ### Soal 1a
 Server
-```C
+```
 void checkconnect()
 { // check Disconnects + Read vals
     resetbuffer();
@@ -154,7 +154,7 @@ while (1)
             ...
 ```
 Client
-```C
+```
 void regis()
 {
     read(sock, receive, 1024);
@@ -205,7 +205,7 @@ void sends(char data[])
 }
 ```
 Di sini untuk mencapai ketentuan soal dimana hanya satu client bisa login pada satu waktu maka menggunakan array yang bersifat seperti antrian dari geeks for geeks. Pada awalnya client membaca input dari user berupa pilihan login atau register
-```C
+```
 while (1)
     {
         pthread_t thread;
@@ -225,7 +225,7 @@ while (1)
         }
 ```
 Kemudian mengirim input tersebut ke server. Untuk memanage client yang sedang terhubung menggunakan fungsi pembantu ```checkconnect()``` yang akan menggeser array antrian client saat menerima pesan "0"
-```C
+```
 void checkconnect()
 { // check Disconnects + Read vals
     resetbuffer();
@@ -244,7 +244,7 @@ void checkconnect()
 }
 ```
 Kemudian saat user memilih register maka akan masuk ke fungsi ```addUser()``` yang akan menambahkan data user baru ke file ```akun.txt``` dan mengirim pesan registrasi berhasil ke client
-```C
+```
 void addUser(char str[])
 {
     printf("ADDING USER\n");
@@ -268,7 +268,7 @@ if (strcmp(command, "register") == 0)
                 }
 ```
 Ketika memilih login maka ketika menerima username dan password dari client server akan mengecek apakah username dan pass yang diterima sesuai dengan file ```akun.txt```
-```C
+```
 bool checkuser(char str[])
 {
     printf("checkuser\n");
@@ -314,7 +314,92 @@ if (strcmp(command, "login") == 0)
                 }
  ```
 Fungsi ```checkuser()``` akan loop through file ```akun.txt``` untuk mencari line yang sesuai dengan pesan dari client.
+<img src="https://github.com/yoursemicolon/soal-shift-sisop-modul-3-B05-2021/blob/main/screenshots/soal1a1.png"></img> <br>
+<img src="https://github.com/yoursemicolon/soal-shift-sisop-modul-3-B05-2021/blob/main/screenshots/soal1a2.png"></img>
 
+### Soal 1b
+```
+    struct sockaddr_in address;
+    int opt = 1;
+    int addrlen = sizeof(address);
+    
+    FILE* dir = fopen("files.tsv","a");
+    fclose("files.tsv");
+```
+Membuat file ```files.tsv``` di awal program
+
+<img src="https://github.com/yoursemicolon/soal-shift-sisop-modul-3-B05-2021/blob/main/screenshots/soal1b1.png"></img> <br>
+### Soal 1c
+Server
+```
+void addFiles()
+{
+    char publisher[1024] = {0};
+    char tahun[1024] = {0};
+    char path[1024] = {0};
+    sends("Publisher:\n");
+    checkconnect();
+    strcpy(publisher, receive);
+    sends("Tahun Publish:\n");
+    checkconnect();
+    strcpy(tahun, receive);
+    sends("Filepath:\n");
+    checkconnect();
+    strcpy(path, receive);
+    char *ptr1;
+    char slash = '/';
+    ptr1 = strrchr(path, slash);
+    ptr1++;
+    char fname[100];
+    strcpy(fname, ptr1);
+    char ext[10];
+    char *ptr2;
+    char dot = '.';
+    ptr2 = strrchr(path, dot);
+    ptr2++;
+    strcpy(ext, ptr2);
+    char dir[300] = "/home/kyu/Documents/Praktikum/Modul3/soal1/files/";
+    strcat(dir, fname);
+    FILE *tsv = fopen("files.tsv", "a");
+    char info[5000];
+    sprintf(info, "%s\t%s\t%s\t%s\t%s\n", fname, publisher, tahun, ext, path);
+    fputs(info, tsv);
+    fclose(tsv);
+    writefile(dir);
+    sends("File berhasil ditambahkan\n");
+    FILE *log = fopen("running.log", "a");
+    fprintf(log, "Tambah: %s %s", fname, upass);
+    fclose(log);
+}
+
+```
+Client
+```
+void add()
+{
+    char temp[1024];
+    for (int i = 0; i < 3; i++)
+    {
+        resetbuffer();
+        scanf("%s", temp);
+        temp[strcspn(temp, "\n")] = 0;
+        sends(temp);
+    }
+    FILE *sfd = fopen(temp, "rb");
+    char data[1024] = {0};
+
+    while (1)
+    {
+        memset(data, 0, 1024);
+        size_t size = fread(data, sizeof(char), 1024, sfd);
+        send(sock, data, 1024, 0);
+        break;
+    }
+    printf("break");
+    fclose(sfd);
+    resetbuffer();
+}
+```
 <a name="soal2"></a>
 ## Soal 2
 Pada soal ini, kami diminta untuk membuat program dengan ketentuan sebagai berikut.
