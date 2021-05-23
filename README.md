@@ -333,16 +333,8 @@ Setiap 1 file yang dikategorikan dioperasikan oleh 1 thread agar bisa berjalan s
 **Output**
 
 - Opsi -f
-<img width="384" alt="Screen Shot 2021-05-23 at 12 16 37" src="https://user-images.githubusercontent.com/72669398/119249188-c2212880-bbc0-11eb-9565-4039aa9eea03.png">
 
-<img width="435" alt="Screen Shot 2021-05-23 at 12 18 30" src="https://user-images.githubusercontent.com/72669398/119249268-65723d80-bbc1-11eb-85db-2a8cb57c25ce.png">
-
-<img width="129" alt="Screen Shot 2021-05-23 at 12 19 35" src="https://user-images.githubusercontent.com/72669398/119249269-67d49780-bbc1-11eb-914f-de3dfe458645.png">
 
 - Opsi -d
-<img width="458" alt="Screen Shot 2021-05-23 at 12 24 05" src="https://user-images.githubusercontent.com/72669398/119249344-03660800-bbc2-11eb-8a32-e4ecaff968f3.png">
 
-<img width="446" alt="Screen Shot 2021-05-23 at 12 24 46" src="https://user-images.githubusercontent.com/72669398/119249345-0660f880-bbc2-11eb-8374-7904014eada3.png">
-
-<img width="106" alt="Screen Shot 2021-05-23 at 12 24 18" src="https://user-images.githubusercontent.com/72669398/119249351-08c35280-bbc2-11eb-8d32-fd3e5bd29932.png">
 
