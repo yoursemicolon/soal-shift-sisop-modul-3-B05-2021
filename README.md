@@ -26,7 +26,7 @@ Kita diminta untuk membuat sistem database buku dimana :
 
 ### Soal 1a
 Server
-```
+```C
 void checkconnect()
 { // check Disconnects + Read vals
     resetbuffer();
