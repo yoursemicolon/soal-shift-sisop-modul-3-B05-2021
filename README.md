@@ -217,6 +217,7 @@ File 2 : Sad, gagal :( (jika gagal)
 File 3 : Berhasil Dikategorikan
 ```
 **Opsi -f digunakan untuk mengkategorikan file sesuai argument yang diinginkan**
+
 Jika argument -f  dan argument path yang sesuai, nantinya akan dimasukkan ke dalam thread, kemudian akan dieksekusi pada fungsi ```pindahFile```. Thread akan dijalankan bersamaan sesuai dengan banyaknya thread menggunakan ```pthread_join```.
 
 **Source Code**
@@ -256,6 +257,7 @@ Jika berhasil, print “Direktori sukses disimpan!”
 Jika gagal, print “Yah, gagal disimpan :(“
 ```
 **Opsi -d digunakan untuk mengkategorikan file pada suatu direktori**
+
 Jika argument -d  dan argument path yang sesuai hanya satu yang harus dilakukan pertama kali yaitu memanggil fungsi ```sortHere```. Kemudian, setiap elemen pada array nantinya akan dibuat thread untuk mengeksekusi fungsi ```pindahFile```.
 
 **Source Code**
@@ -295,6 +297,7 @@ $ ./soal3 \*
 Opsi ini akan mengkategorikan seluruh file yang ada di working directory ketika menjalankan program C tersebut.
 
 **Opsi * digunakan untuk mengkategorikan seluruh file yang ada di working directory ketika menjalankan program**
+
 Jika argument * diberikan maka yang pertama dilakukan adalah menyimpan path current working directory dikarenakan akan mengkategorikan file pada direktori yang sedang digunakan. Kemudian akan memanggil ```sortHere`` untuk menyimpan setiap path dalam array lalu akan dibuat thread untuk dieksekusi pada fungsi ``pindahFile`` dan untuk mengkategorikan file thread akan dijalankan secara paralel.
 
 **Source Code**
